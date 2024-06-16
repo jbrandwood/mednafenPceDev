@@ -116,14 +116,15 @@ include snes_faust/Makefile.am.inc
 endif
 
 SS_SUBDIRS =
+
 if WANT_SS_EMU
-SS_SUBDIRS 		=	ss
+SS_SUBDIRS 		+=	ss
 mednafen_LDADD          +=      ss/libss.a
 mednafen_DEPENDENCIES   +=      ss/libss.a
 endif
 
 if WANT_SSFPLAY_EMU
-SS_SUBDIRS 		=	ss
+SS_SUBDIRS 		+=	ss
 mednafen_LDADD          +=      ss/libssfplay.a
 mednafen_DEPENDENCIES   +=      ss/libssfplay.a
 endif

@@ -3,12 +3,12 @@ AC_DEFUN([AC_FUNC_MKDIR],
 [AC_CHECK_FUNCS([mkdir _mkdir])
 AC_CACHE_CHECK([whether mkdir takes one argument],
                [ac_cv_mkdir_takes_one_arg],
-[AC_TRY_COMPILE([
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <sys/stat.h>
 #if HAVE_UNISTD_H
 #  include <unistd.h>
 #endif
-], [mkdir (".");],
+]], [[mkdir (".");]])],
 [ac_cv_mkdir_takes_one_arg=yes], [ac_cv_mkdir_takes_one_arg=no])])
 if test x"$ac_cv_mkdir_takes_one_arg" = xyes; then
   AC_DEFINE([MKDIR_TAKES_ONE_ARG], 1,
@@ -107,10 +107,10 @@ no_alsa=""
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
 
 AC_LANG_SAVE
-AC_LANG_C
-AC_TRY_COMPILE([
+AC_LANG([C])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <alsa/asoundlib.h>
-], [
+]], [[
 /* ensure backward compatibility */
 #if !defined(SND_LIB_MAJOR) && defined(SOUNDLIB_VERSION_MAJOR)
 #define SND_LIB_MAJOR SOUNDLIB_VERSION_MAJOR
@@ -142,7 +142,7 @@ AC_TRY_COMPILE([
 #    endif
 #  endif
 exit(0);
-],
+]])],
   [AC_MSG_RESULT(found.)],
   [AC_MSG_RESULT(not present.)
    ifelse([$3], , [AC_MSG_ERROR(Sufficiently new version of libasound not found.)])

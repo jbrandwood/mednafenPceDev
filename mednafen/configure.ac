@@ -1,17 +1,17 @@
-AC_INIT([src/mednafen.cpp])
-AC_GNU_SOURCE
-AC_USE_SYSTEM_EXTENSIONS
-AC_CONFIG_MACRO_DIR([m4])
-
 #
 # Avoid trailing and leading zeroes in the decimal version components to avoid confusing not-so-learned people.
 #
-MEDNAFEN_VERSION="1.29.0.pceDev-1.2 (`git log -1 --format=format:%h`) built on `date` "
+MEDNAFEN_VERSION="1.29.0.pceDev-1.2"
 MEDNAFEN_VERSION_NUMERIC=0x00102900
 #                        0xJJJnnnRR
 
+AC_INIT([mednafen], [1.29.0.pceDev-1.2])
+AC_CONFIG_SRCDIR([src/mednafen.cpp])
+AC_CONFIG_MACRO_DIR([m4])
+AC_USE_SYSTEM_EXTENSIONS
+
 AC_CANONICAL_HOST
-AM_INIT_AUTOMAKE([mednafen], $MEDNAFEN_VERSION)
+AM_INIT_AUTOMAKE
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES])
 AC_CONFIG_HEADERS([include/config.h:include/config.h.in])
 
@@ -21,15 +21,16 @@ AM_PROG_AS
 AM_PROG_CC_C_O
 AC_PROG_CXX
 AC_PROG_CXXCPP
-AC_LANG_CPLUSPLUS
+AC_PROG_RANLIB
+AC_LANG([C++])
 
 CXX="$CXX -std=gnu++11"
 CXXCPP="$CXXCPP -std=gnu++11"
 CC="$CC -std=gnu99"
 CPP="$CPP -std=gnu99"
 
-AX_CFLAGS_GCC_OPTION([-fsigned-char], CC)
-AX_CXXFLAGS_GCC_OPTION([-fsigned-char], CXX)
+AX_CFLAGS_GCC_OPTION([-fsigned-char], [CC])
+AX_CXXFLAGS_GCC_OPTION([-fsigned-char], [CXX])
 
 AC_PROG_INSTALL
 
@@ -86,7 +87,7 @@ AM_ICONV
 if test "x$am_cv_func_iconv" != "xyes"; then
 	AC_MSG_ERROR([*** iconv not found!])
 fi
-AM_GNU_GETTEXT
+AM_GNU_GETTEXT([external])
 
 AC_SUBST(LIBICONV)
 AC_SUBST(LIBINTL)
@@ -97,13 +98,13 @@ AC_SUBST([ZLIB_LIBS])
 
 
 ENABLE_LIBXXX_MODE=false
-AC_ARG_ENABLE(libxxx-mode, AC_HELP_STRING([--enable-libxxx-mode], [dev use only]))
+AC_ARG_ENABLE(libxxx-mode, AS_HELP_STRING([--enable-libxxx-mode], [dev use only]))
 if test x$enable_libxxx_mode = xyes; then
 	ENABLE_LIBXXX_MODE=true
 fi
 
 AC_ARG_ENABLE(dev-build,
- AC_HELP_STRING([--enable-dev-build], [enable expensive Mednafen developer features [[default=no]]]),
+ AS_HELP_STRING([--enable-dev-build], [enable expensive Mednafen developer features [[default=no]]]),
                   , enable_dev_build=no)
 
 if test x$enable_dev_build = xyes; then
@@ -252,7 +253,7 @@ AM_CONDITIONAL(WANT_DEBUGGER, false)
 AM_CONDITIONAL(WANT_FANCY_SCALERS, false)
 
 AC_ARG_ENABLE(debugger,
- AC_HELP_STRING([--enable-debugger], [build with internal debugger [[default=yes]]]),
+ AS_HELP_STRING([--enable-debugger], [build with internal debugger [[default=yes]]]),
                   , enable_debugger=yes)
 
 if test x$enable_debugger = xyes; then
@@ -261,7 +262,7 @@ if test x$enable_debugger = xyes; then
 fi
 
 AC_ARG_ENABLE(cjk-fonts,
- AC_HELP_STRING([--enable-cjk-fonts], [build with internal CJK(Chinese, Japanese, Korean) fonts [[default=yes]]]),
+ AS_HELP_STRING([--enable-cjk-fonts], [build with internal CJK(Chinese, Japanese, Korean) fonts [[default=yes]]]),
                   , enable_cjk_fonts=yes)
 
 if test x$enable_cjk_fonts = xyes; then
@@ -269,7 +270,7 @@ if test x$enable_cjk_fonts = xyes; then
 fi
 
 AC_ARG_ENABLE(fancy-scalers,
- AC_HELP_STRING([--enable-fancy-scalers], [build with fancy(2xsai, hq2x, etc.) CPU-intensive software video scalers [[default=yes]]]),
+ AS_HELP_STRING([--enable-fancy-scalers], [build with fancy(2xsai, hq2x, etc.) CPU-intensive software video scalers [[default=yes]]]),
                   , enable_fancy_scalers=yes)
 
 if test x$enable_fancy_scalers = xyes; then
@@ -281,7 +282,7 @@ dnl
 dnl The code that uses $enable_altivec is lower, in the CPU architecture section.
 dnl
 AC_ARG_ENABLE(altivec,
- AC_HELP_STRING([--enable-altivec], [use AltiVec extensions on PowerPC/POWER ISA processors [[default=yes]]]),
+ AS_HELP_STRING([--enable-altivec], [use AltiVec extensions on PowerPC/POWER ISA processors [[default=yes]]]),
                   , enable_altivec=yes)
 
 
@@ -322,7 +323,7 @@ AM_CONDITIONAL(NEED_HUC6270_EMU, false)
 AM_CONDITIONAL(NEED_ARCADE_CARD_EMU, false)
 
 AC_ARG_ENABLE(apple2,
- AC_HELP_STRING([--enable-apple2], [build with Apple II+ emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-apple2], [build with Apple II+ emulation [[default=yes]]]),
                   , enable_apple2=yes)
 
 if test x$enable_apple2 = xyes; then
@@ -331,7 +332,7 @@ if test x$enable_apple2 = xyes; then
 fi
 
 AC_ARG_ENABLE(gb,
- AC_HELP_STRING([--enable-gb], [build with GameBoy emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-gb], [build with GameBoy emulation [[default=yes]]]),
                   , enable_gb=yes)
 
 if test x$enable_gb = xyes; then
@@ -342,7 +343,7 @@ if test x$enable_gb = xyes; then
 fi
 
 AC_ARG_ENABLE(gba,
- AC_HELP_STRING([--enable-gba], [build with GameBoy Advance emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-gba], [build with GameBoy Advance emulation [[default=yes]]]),
                   , enable_gba=yes)
 
 if test x$enable_gba = xyes; then
@@ -353,7 +354,7 @@ if test x$enable_gba = xyes; then
 fi
 
 AC_ARG_ENABLE(lynx,
- AC_HELP_STRING([--enable-lynx], [build with Atari Lynx emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-lynx], [build with Atari Lynx emulation [[default=yes]]]),
                   , enable_lynx=yes)
 
 if test x$enable_lynx = xyes; then
@@ -363,7 +364,7 @@ if test x$enable_lynx = xyes; then
 fi
 
 AC_ARG_ENABLE(md,
- AC_HELP_STRING([--enable-md], [build with Sega Genesis/MegaDrive emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-md], [build with Sega Genesis/MegaDrive emulation [[default=yes]]]),
                   , enable_md=yes)
 
 if test x$enable_md = xyes; then
@@ -377,7 +378,7 @@ if test x$enable_md = xyes; then
 fi
 
 AC_ARG_ENABLE(nes,
- AC_HELP_STRING([--enable-nes], [build with Nintendo Entertainment System emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-nes], [build with Nintendo Entertainment System emulation [[default=yes]]]),
                   , enable_nes=yes)
 
 if test x$enable_nes = xyes; then
@@ -386,7 +387,7 @@ if test x$enable_nes = xyes; then
 fi
 
 #AC_ARG_ENABLE(nes_new,
-# AC_HELP_STRING([--enable-nes-new], [build with experimental, alternate new(ish) NES emulation [[default=yes]]]),
+# AS_HELP_STRING([--enable-nes-new], [build with experimental, alternate new(ish) NES emulation [[default=yes]]]),
 #                  , enable_nes_new=yes)
 #
 #if test x$enable_nes_new = xyes; then
@@ -395,7 +396,7 @@ fi
 #fi
 
 AC_ARG_ENABLE(ngp,
- AC_HELP_STRING([--enable-ngp], [build with Neo Geo Pocket emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-ngp], [build with Neo Geo Pocket emulation [[default=yes]]]),
                   , enable_ngp=yes)
 
 if test x$enable_ngp = xyes; then
@@ -406,7 +407,7 @@ if test x$enable_ngp = xyes; then
 fi
 
 AC_ARG_ENABLE(pce,
- AC_HELP_STRING([--enable-pce], [build with PC Engine(TurboGrafx 16) emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-pce], [build with PC Engine(TurboGrafx 16) emulation [[default=yes]]]),
                   , enable_pce=yes)
 
 if test x$enable_pce = xyes; then
@@ -418,7 +419,7 @@ if test x$enable_pce = xyes; then
 fi
 
 AC_ARG_ENABLE(pce-fast,
- AC_HELP_STRING([--enable-pce-fast], [build the separate, fast PC Engine(TurboGrafx 16) emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-pce-fast], [build the separate, fast PC Engine(TurboGrafx 16) emulation [[default=yes]]]),
                   , enable_pce_fast=yes)
 
 if test x$enable_pce_fast = xyes; then
@@ -429,7 +430,7 @@ if test x$enable_pce_fast = xyes; then
 fi
 
 AC_ARG_ENABLE(pcfx,
- AC_HELP_STRING([--enable-pcfx], [build with PC-FX emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-pcfx], [build with PC-FX emulation [[default=yes]]]),
                   , enable_pcfx=yes)
 
 if test x$enable_pcfx = xyes; then
@@ -441,7 +442,7 @@ if test x$enable_pcfx = xyes; then
 fi
 
 AC_ARG_ENABLE(psx,
- AC_HELP_STRING([--enable-psx], [build with PlayStation emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-psx], [build with PlayStation emulation [[default=yes]]]),
                   , enable_psx=yes)
 
 if test x$enable_psx = xyes; then
@@ -450,7 +451,7 @@ if test x$enable_psx = xyes; then
 fi
 
 AC_ARG_ENABLE(sasplay,
- AC_HELP_STRING([--enable-sasplay], [build with Sega Arcade SCSP Player [[default=yes]]]),
+ AS_HELP_STRING([--enable-sasplay], [build with Sega Arcade SCSP Player [[default=yes]]]),
                   , enable_sasplay=yes)
 
 if test x$enable_sasplay = xyes; then
@@ -460,7 +461,7 @@ if test x$enable_sasplay = xyes; then
 fi
 
 AC_ARG_ENABLE(sms,
- AC_HELP_STRING([--enable-sms], [build with SMS+GG emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-sms], [build with SMS+GG emulation [[default=yes]]]),
                   , enable_sms=yes)
 
 if test x$enable_sms = xyes; then
@@ -473,7 +474,7 @@ if test x$enable_sms = xyes; then
 fi
 
 AC_ARG_ENABLE(snes,
- AC_HELP_STRING([--enable-snes], [build with SNES emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-snes], [build with SNES emulation [[default=yes]]]),
                   , enable_snes=yes)
 
 if test x$enable_snes = xyes; then
@@ -482,7 +483,7 @@ if test x$enable_snes = xyes; then
 fi
 
 AC_ARG_ENABLE(snes-faust,
- AC_HELP_STRING([--enable-snes-faust], [build with experimental fast SNES emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-snes-faust], [build with experimental fast SNES emulation [[default=yes]]]),
                   , enable_snes_faust=yes)
 
 if test x$enable_snes_faust = xyes; then
@@ -491,7 +492,7 @@ if test x$enable_snes_faust = xyes; then
 fi
 
 AC_ARG_ENABLE(ss,
- AC_HELP_STRING([--enable-ss], [build with Sega Saturn emulation [[default=x86_64 amd64 aarch64* arm64* ppc64* powerpc64*]]]),
+ AS_HELP_STRING([--enable-ss], [build with Sega Saturn emulation [[default=x86_64 amd64 aarch64* arm64* ppc64* powerpc64*]]]),
                   , [enable_ss="x86_64 amd64 aarch64* arm64* ppc64* powerpc64*"])
 for i in $enable_ss; do case $host_cpu in $i) enable_ss=yes ;; esac; done
 
@@ -502,7 +503,7 @@ if test "x$enable_ss" = "xyes"; then
 fi
 
 AC_ARG_ENABLE(ssfplay,
- AC_HELP_STRING([--enable-ssfplay], [build with SSF playback support [[default=yes]]]),
+ AS_HELP_STRING([--enable-ssfplay], [build with SSF playback support [[default=yes]]]),
                   , enable_ssfplay=yes)
 
 if test x$enable_ssfplay = xyes; then
@@ -512,7 +513,7 @@ if test x$enable_ssfplay = xyes; then
 fi
 
 AC_ARG_ENABLE(vb,
- AC_HELP_STRING([--enable-vb], [build with Virtual Boy emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-vb], [build with Virtual Boy emulation [[default=yes]]]),
                   , enable_vb=yes)
 
 if test x$enable_vb = xyes; then
@@ -524,7 +525,7 @@ fi
 
 
 AC_ARG_ENABLE(wswan,
- AC_HELP_STRING([--enable-wswan], [build with WonderSwan emulation [[default=yes]]]),
+ AS_HELP_STRING([--enable-wswan], [build with WonderSwan emulation [[default=yes]]]),
                   , enable_wswan=yes)
 
 if test x$enable_wswan = xyes; then
@@ -540,7 +541,7 @@ fi
 # ALSA
 #
 AM_CONDITIONAL(HAVE_ALSA, false)
-AC_ARG_ENABLE(alsa, AC_HELP_STRING([--enable-alsa], [support the ALSA audio API [[default=yes]]]),
+AC_ARG_ENABLE(alsa, AS_HELP_STRING([--enable-alsa], [support the ALSA audio API [[default=yes]]]),
 	[],
 	[enable_alsa=yes])
 if test x$enable_alsa = xyes; then
@@ -564,7 +565,7 @@ AC_SUBST([ALSA_CFLAGS])
 # JACK
 #
 AM_CONDITIONAL(HAVE_JACK, false)
-AC_ARG_ENABLE(jack, AC_HELP_STRING([--enable-jack], [support the JACK audio API [[default=yes]]]),
+AC_ARG_ENABLE(jack, AS_HELP_STRING([--enable-jack], [support the JACK audio API [[default=yes]]]),
 	[],
 	[enable_jack=yes])
 if test x$enable_jack = xyes; then
@@ -584,18 +585,18 @@ AC_SUBST([JACK_CFLAGS])
 #
 AM_CONDITIONAL(HAVE_OPENBSD_AUDIO, false)
 AC_MSG_CHECKING([for OpenBSD audio])
-AC_TRY_COMPILE([
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 	#include <sys/types.h>
 	#include <sys/ioctl.h>
 	#include <sys/audioio.h>
 	#include <string.h>
-	],
-	[
+	]],
+	[[
 	struct audio_swpar par;
 	struct audio_pos pos;
 	struct audio_status status;
 	AUDIO_INITPAR(&par);
-	],
+	]])],
 	[AC_MSG_RESULT([yes])
 	 AM_CONDITIONAL(HAVE_OPENBSD_AUDIO, true)
 	 AC_DEFINE([HAVE_OPENBSD_AUDIO], [1], [Define if we are compiling with OpenBSD audio support.])],
@@ -778,8 +779,8 @@ else
 		#include <pthread.h>
 		])
 	AC_MSG_CHECKING([type for pthread affinity setting])
-	AC_TRY_COMPILE(
-		[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+		[[
 			#include <pthread.h>
 
 			#if defined HAVE_SCHED_H
@@ -789,8 +790,8 @@ else
 			#if defined(HAVE_PTHREAD_NP_H)
 			 #include <pthread_np.h>
 			#endif
-		],
-		[
+		]],
+		[[
 			cpu_set_t c;
 			int result;
 
@@ -798,13 +799,13 @@ else
 
 			result = pthread_setaffinity_np(pthread_self(), sizeof(c), &c);
 			result = pthread_getaffinity_np(pthread_self(), sizeof(c), &c);
-		],
+		]])],
 		[
 			AC_MSG_RESULT([cpu_set_t])
 			AC_DEFINE([PTHREAD_AFFINITY_NP], [cpu_set_t], [Define to CPU set type if we are compiling with pthreads affinity setting support.])
 		],
-			AC_TRY_COMPILE(
-				[
+			AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+				[[
 					#include <pthread.h>
 
 					#if defined HAVE_SCHED_H
@@ -814,8 +815,8 @@ else
 					#if defined(HAVE_PTHREAD_NP_H)
 					 #include <pthread_np.h>
 					#endif
-				],
-				[
+				]],
+				[[
 					cpuset_t c;
 					int result;
 
@@ -823,7 +824,7 @@ else
 
 					result = pthread_setaffinity_np(pthread_self(), sizeof(c), &c);
 					result = pthread_getaffinity_np(pthread_self(), sizeof(c), &c);
-				],
+				]])],
 				[
 					AC_MSG_RESULT([cpuset_t])
 					AC_DEFINE([PTHREAD_AFFINITY_NP], [cpuset_t], [Define to CPU set type if we are compiling with pthreads affinity setting support.])
@@ -839,21 +840,21 @@ else
 	# Linux joystick
 	#
 	AC_MSG_CHECKING([for Linux joystick APIs])
-	AC_TRY_COMPILE([],
-		[
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]],
+		[[
 			#ifndef __linux__
 			 #error "error"
 			#endif
-		],
+		]])],
 		[
-			AC_TRY_COMPILE([
+			AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 				#include <linux/joystick.h>
 				#include <linux/input.h>
-			],
-			[
+			]],
+			[[
 				struct js_event dummy0;
 				struct ff_effect dummy1;
-			],
+			]])],
 			[
 				AC_MSG_RESULT([yes])
 				AM_CONDITIONAL(HAVE_LINUX_JOYSTICK, true)
@@ -910,7 +911,7 @@ AM_CONDITIONAL(ARCH_POWERPC, false)
 TRIO_CFLAGS=""
 
 dnl OpenBSD...
-AC_TRY_LINK([], [asm volatile("vcvtss2si %xmm6,%ecx\n\tvhaddps %ymm7,%ymm7,%ymm7\n\tvzeroupper\n\t");],
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[asm volatile("vcvtss2si %xmm6,%ecx\n\tvhaddps %ymm7,%ymm7,%ymm7\n\tvzeroupper\n\t");]])],
 	AC_DEFINE([HAVE_INLINEASM_AVX], [1], [Define if GNU-style AVX inline assembly is supported.]),
 	[])
 
@@ -967,4 +968,5 @@ AC_SUBST([AM_CXXFLAGS], "$ALTIVEC_FLAGS $OPTIMIZER_FLAGS $WARNING_FLAGS $CODEGEN
 AC_SUBST([AM_LDFLAGS], "$NOPICPIE_LDFLAGS")
 
 dnl Output Makefiles
-AC_OUTPUT([Makefile po/Makefile.in intl/Makefile src/Makefile src/drivers/Makefile src/drivers_libxxx/Makefile src/drivers_dos/Makefile src/sexyal/Makefile src/ss/Makefile])
+AC_CONFIG_FILES(Makefile po/Makefile.in intl/Makefile src/Makefile src/drivers/Makefile src/drivers_libxxx/Makefile src/drivers_dos/Makefile src/sexyal/Makefile src/ss/Makefile)
+AC_OUTPUT
