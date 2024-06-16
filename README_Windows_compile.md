@@ -18,12 +18,12 @@ You will also need to do the following:
  1. Create a directory "mednafen-cross-sources", within your home directory
  2. Obtain the following packages and place them in that folder:
    - binutils-2.28.1.tar.bz2 (for example, from here: https://ftp.gnu.org/gnu/binutils/ )
-   - mingw-w64-v5.0.4.tar.bz2 (for example, from here: https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/ )
+   - mingw-w64-v5.0.5.tar.bz2 (for example, from here: https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/ )
    - gcc-4.9.4.tar.bz2 (for example, from here: https://ftp.gnu.org/gnu/gcc/gcc-4.9.4/ )
-   - libiconv-1.16.tar.gz (for example, from here: https://ftp.gnu.org/gnu/libiconv/ )
-   - flac-1.3.3.tar.xz (for example, from here: https://ftp.osuosl.org/pub/xiph/releases/flac/ )
-   - zlib-1.2.11.tar.gz (for example, from here: https://zlib.net/fossils/ )
-   - SDL2-2.0.9.tar.gz (for example, from here: https://www.libsdl.org/release/ )
+   - libiconv-1.17.tar.gz (for example, from here: https://ftp.gnu.org/gnu/libiconv/ )
+   - flac-1.3.4.tar.xz (for example, from here: https://ftp.osuosl.org/pub/xiph/releases/flac/ )
+   - zlib-1.3.1.tar.gz (for example, from here: https://zlib.net/fossils/ )
+   - SDL2-2.28.5.tar.gz (for example, from here: https://www.libsdl.org/release/ )
  3. Copy all of the mednafen/mswin/*.patch files into that folder (the one named 'mednafen-cross-sources'). For example, from within the mednafen/mswin directory, ```cp *.patch ~/mednafen-cross-sources/```
 
 ### Build Toolchain Commands
