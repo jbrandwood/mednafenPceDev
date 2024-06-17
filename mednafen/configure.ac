@@ -1,14 +1,14 @@
-#
-# Avoid trailing and leading zeroes in the decimal version components to avoid confusing not-so-learned people.
-#
-MEDNAFEN_VERSION="1.29.0.pceDev-1.2"
-MEDNAFEN_VERSION_NUMERIC=0x00102900
-#                        0xJJJnnnRR
-
 AC_INIT([mednafen], [1.29.0.pceDev-1.2])
 AC_CONFIG_SRCDIR([src/mednafen.cpp])
 AC_CONFIG_MACRO_DIR([m4])
 AC_USE_SYSTEM_EXTENSIONS
+
+#
+# Avoid trailing and leading zeroes in the decimal version components to avoid confusing not-so-learned people.
+#
+MEDNAFEN_VERSION="1.29.0.pceDev-1.2 (`git log -1 --format=format:%h`) built on `date` "
+MEDNAFEN_VERSION_NUMERIC=0x00102900
+#                        0xJJJnnnRR
 
 AC_CANONICAL_HOST
 AM_INIT_AUTOMAKE
@@ -960,12 +960,12 @@ AC_C_BIGENDIAN([AC_DEFINE([MSB_FIRST],[1],[Define on big-endian platforms.])],
 [
  AC_DEFINE([LSB_FIRST],[1],[Define on little-endian platforms.])
 ])
-AC_DEFINE_UNQUOTED([MEDNAFEN_VERSION],"$MEDNAFEN_VERSION", [Mednafen version definition.])
-AC_DEFINE_UNQUOTED([MEDNAFEN_VERSION_NUMERIC],$MEDNAFEN_VERSION_NUMERIC, [Mednafen version numeric.])
+AC_DEFINE_UNQUOTED([MEDNAFEN_VERSION],["$MEDNAFEN_VERSION"], [Mednafen version definition.])
+AC_DEFINE_UNQUOTED([MEDNAFEN_VERSION_NUMERIC],[$MEDNAFEN_VERSION_NUMERIC], [Mednafen version numeric.])
 
-AC_SUBST([AM_CFLAGS], "$ALTIVEC_FLAGS $OPTIMIZER_FLAGS $WARNING_FLAGS $CODEGEN_FLAGS $CODEGEN_CFLAGS $NOPICPIE_FLAGS")
-AC_SUBST([AM_CXXFLAGS], "$ALTIVEC_FLAGS $OPTIMIZER_FLAGS $WARNING_FLAGS $CODEGEN_FLAGS $CODEGEN_CXXFLAGS $NOPICPIE_FLAGS")
-AC_SUBST([AM_LDFLAGS], "$NOPICPIE_LDFLAGS")
+AC_SUBST([AM_CFLAGS], ["$ALTIVEC_FLAGS $OPTIMIZER_FLAGS $WARNING_FLAGS $CODEGEN_FLAGS $CODEGEN_CFLAGS $NOPICPIE_FLAGS"])
+AC_SUBST([AM_CXXFLAGS], ["$ALTIVEC_FLAGS $OPTIMIZER_FLAGS $WARNING_FLAGS $CODEGEN_FLAGS $CODEGEN_CXXFLAGS $NOPICPIE_FLAGS"])
+AC_SUBST([AM_LDFLAGS], ["$NOPICPIE_LDFLAGS"])
 
 dnl Output Makefiles
 AC_CONFIG_FILES(Makefile po/Makefile.in intl/Makefile src/Makefile src/drivers/Makefile src/drivers_libxxx/Makefile src/drivers_dos/Makefile src/sexyal/Makefile src/ss/Makefile)
